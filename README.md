@@ -1,50 +1,79 @@
-# Welcome to your Expo app 👋
+# Framez - Social Media Mobile App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A React Native social application where users can share posts with images.
 
-## Get started
+## Features
 
-1. Install dependencies
+- Secure Email/Password Authentication
+- Create posts with text and images
+- Real-time feed updates
+- User profiles with post history
+- Persistent authentication sessions
 
-   ```bash
-   npm install
-   ```
+## Tech Stack
 
-2. Start the app
+- **Framework**: React Native (Expo)
+- **Backend**: Firebase
+  - Authentication
+  - Firestore Database
+  - Cloud Storage
+- **Navigation**: React Navigation v6
+- **State Management**: React Context API
 
-   ```bash
-   npx expo start
-   ```
+## Installation
 
-In the output, you'll find options to open the app in a
+### Prerequisites
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+- Node.js (v16+)
+- Expo CLI
+- Firebase account
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+### Setup
 
-## Get a fresh project
+\`\`\`bash
 
-When you're ready, run:
+# Clone repository
 
-```bash
-npm run reset-project
-```
+git clone https://github.com/Dcomputer22/framez-social-app.git
+cd framez
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+# Install dependencies
 
-## Learn more
+npm install
 
-To learn more about developing your project with Expo, look at the following resources:
+# Start development server
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+npx expo start
+\`\`\`
 
-## Join the community
+### Firebase Configuration
 
-Join our community of developers creating universal apps.
+1. Create Firebase project
+2. Enable Authentication, Firestore, and Storage
+3. Copy your Firebase config to \`App.js\`
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Demo
+
+- **Video Demo**: [Watch on YouTube](your-youtube-link)
+- **Live App**: [Try on Appetize.io](your-appetize-link)
+
+## Building
+
+\`\`\`bash
+
+# Build APK
+
+eas build --platform android --profile preview
+
+# Build iOS
+
+eas build --platform ios --profile preview
+\`\`\`
+
+## License
+
+MIT License
+
+## Author
+
+Fatima - HNG Stage 4 Frontend Task
