@@ -1,9 +1,7 @@
-import { db } from '@/config/firebase';
 import { useAuth } from '@/contexts/AuthContext';
-import { Post } from '@/types';
+import { api } from '@/convex/_generated/api';
 import { Ionicons } from '@expo/vector-icons';
-import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
-import React, { useEffect, useState } from 'react';
+import { useQuery } from 'convex/react';
 import {
   ActivityIndicator,
   Alert,
@@ -18,33 +16,14 @@ import {
 
 export default function ProfileScreen() {
   const { user, signOut } = useAuth();
-  const [userPosts, setUserPosts] = useState<Post[]>([]);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (!user) return;
+  // Fetch user's posts from Convex
+  const userPosts = useQuery(
+    api.posts.getUserPosts,
+    user?.userId ? { userId: user.userId } : 'skip'
+  );
 
-    const q = query(
-      collection(db, 'posts'),
-      where('userId', '==', user.uid),
-      orderBy('createdAt', 'desc')
-    );
-
-    getDocs(q)
-      .then((snapshot) => {
-        const posts = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        })) as Post[];
-        setUserPosts(posts);
-      })
-      .catch((error) => {
-        Alert.alert('Error', error.message);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, [user]);
+  const loading = userPosts === undefined;
 
   const handleLogout = () => {
     Alert.alert('Logout', 'Are you sure you want to logout?', [
@@ -61,7 +40,7 @@ export default function ProfileScreen() {
     ]);
   };
 
-  const renderPost = ({ item }: { item: Post }) => (
+  const renderPost = ({ item }: { item: any }) => (
     <View style={styles.gridItem}>
       {item.imageUrl ? (
         <Image source={{ uri: item.imageUrl }} style={styles.gridImage} />
@@ -79,15 +58,18 @@ export default function ProfileScreen() {
         <View style={styles.profileInfo}>
           <View style={styles.avatar}>
             <Text style={styles.avatarText}>
-              {user?.email?.charAt(0).toUpperCase()}
+              {user?.name?.charAt(0).toUpperCase() ||
+                user?.email?.charAt(0).toUpperCase()}
             </Text>
           </View>
           <View style={styles.details}>
-            <Text style={styles.name}>{user?.email?.split('@')[0]}</Text>
+            <Text style={styles.name}>
+              {user?.name || user?.email?.split('@')[0]}
+            </Text>
             <Text style={styles.email}>{user?.email}</Text>
             <View style={styles.statsRow}>
               <View style={styles.stat}>
-                <Text style={styles.statNumber}>{userPosts.length}</Text>
+                <Text style={styles.statNumber}>{userPosts?.length || 0}</Text>
                 <Text style={styles.statLabel}>posts</Text>
               </View>
               <View style={styles.stat}>
@@ -112,7 +94,7 @@ export default function ProfileScreen() {
         <Text style={styles.sectionTitle}>My Posts</Text>
         {loading ? (
           <ActivityIndicator size="large" color="#54c7aeff" />
-        ) : userPosts.length === 0 ? (
+        ) : !userPosts || userPosts.length === 0 ? (
           <View style={styles.emptyState}>
             <Ionicons name="images-outline" size={64} color="#ccc" />
             <Text style={styles.emptyStateText}>No posts yet</Text>
@@ -121,7 +103,7 @@ export default function ProfileScreen() {
           <FlatList
             data={userPosts}
             renderItem={renderPost}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item._id}
             numColumns={3}
             scrollEnabled={false}
           />

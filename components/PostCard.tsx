@@ -8,9 +8,8 @@ interface PostCardProps {
 }
 
 const PostCard = ({ post }: PostCardProps) => {
-  const formatTime = (timestap: any) => {
-    if (!timestap) return 'Just now';
-    const date = timestap.toDate();
+  const formatTime = (timestamp: number) => {
+    const date = new Date(timestamp);
     const diff = Date.now() - date.getTime();
     const hours = Math.floor(diff / (1000 * 60 * 60));
     if (hours < 1) return 'Just now';
@@ -38,7 +37,7 @@ const PostCard = ({ post }: PostCardProps) => {
         <Image source={{ uri: post.imageUrl }} style={styles.image} />
       )}
 
-      <View>
+      <View style={styles.actions}>
         <TouchableOpacity style={styles.actionButton}>
           <Ionicons name="heart-outline" size={24} color="#000" />
         </TouchableOpacity>
@@ -84,6 +83,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: '#54c7aeff',
     justifyContent: 'center',
+    alignItems: 'center',
     marginRight: 12,
   },
   avatarText: {

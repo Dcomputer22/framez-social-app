@@ -1,15 +1,17 @@
+import { Id } from '@/convex/_generated/dataModel';
+
 export interface User {
-  uid: string;
+  userId: Id<'users'>;
   email: string;
   name: string;
 }
 
 export interface Post {
-  id: string;
-  userId: string;
+  _id: Id<'posts'>;
+  userId: Id<'users'>;
   authorName: string;
   content: string;
-  imageUrl: string;
+  imageUrl?: string;
   likes: number;
-  createdAt: any;
+  createdAt: number;
 }

@@ -1,10 +1,10 @@
-import { db, storage } from '@/config/firebase';
 import { useAuth } from '@/contexts/AuthContext';
+import { api } from '@/convex/_generated/api';
+import { uploadToCloudinary } from '@/utils/cloudinary';
 import { Ionicons } from '@expo/vector-icons';
+import { useMutation } from 'convex/react';
 import * as ImagePicker from 'expo-image-picker';
 import { useRouter } from 'expo-router';
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
-import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import React, { useState } from 'react';
 import {
   ActivityIndicator,
@@ -23,13 +23,15 @@ import {
 export default function CreatePostScreen() {
   const { user } = useAuth();
   const router = useRouter();
+  const createPost = useMutation(api.posts.createPost);
+
   const [content, setContent] = useState('');
   const [image, setImage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   const pickImage = () => {
     ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ['images'],
       allowsEditing: true,
       aspect: [4, 3],
       quality: 0.8,
@@ -39,24 +41,8 @@ export default function CreatePostScreen() {
           setImage(result.assets[0].uri);
         }
       })
-      .catch((error) => {
+      .catch(() => {
         Alert.alert('Error', 'Failed to pick image');
-      });
-  };
-
-  const uploadImage = (uri: string) => {
-    return fetch(uri)
-      .then((response) => response.blob())
-      .then((blob) => {
-        const filename = `posts/${user?.uid}/${Date.now()}.jpg`;
-        const storageRef = ref(storage, filename);
-        return uploadBytes(storageRef, blob);
-      })
-      .then((snapshot) => {
-        return getDownloadURL(snapshot.ref);
-      })
-      .catch((error) => {
-        throw error;
       });
   };
 
@@ -68,17 +54,17 @@ export default function CreatePostScreen() {
 
     setLoading(true);
 
-    const uploadPromise = image ? uploadImage(image) : Promise.resolve(null);
+    const uploadPromise = image
+      ? uploadToCloudinary(image)
+      : Promise.resolve(undefined);
 
     uploadPromise
       .then((imageUrl) => {
-        return addDoc(collection(db, 'posts'), {
-          userId: user?.uid,
-          authorName: user?.email?.split('@')[0] || 'Anonymous',
+        return createPost({
+          userId: user!.userId,
+          authorName: user!.name,
           content: content,
           imageUrl: imageUrl,
-          likes: 0,
-          createdAt: serverTimestamp(),
         });
       })
       .then(() => {

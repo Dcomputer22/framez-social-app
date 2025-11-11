@@ -1,8 +1,7 @@
 import PostCard from '@/components/PostCard';
-import { db } from '@/config/firebase';
-import { Post } from '@/types';
-import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
-import React, { useEffect, useState } from 'react';
+import { api } from '@/convex/_generated/api';
+import { useQuery } from 'convex/react';
+import React, { useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -12,28 +11,16 @@ import {
 } from 'react-native';
 
 export default function FeedScreen() {
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [loading, setLoading] = useState(true);
+  const posts = useQuery(api.posts.getAllPosts);
   const [refreshing, setRefreshing] = useState(false);
 
-  useEffect(() => {
-    const q = query(collection(db, 'posts'), orderBy('createdAt', 'desc'));
-
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const postsData = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      })) as Post[];
-      setPosts(postsData);
-      setLoading(false);
-      setRefreshing(false);
-    });
-
-    return () => unsubscribe();
-  }, []);
+  const loading = posts === undefined;
 
   const onRefresh = () => {
     setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000);
   };
 
   if (loading) {
@@ -47,9 +34,9 @@ export default function FeedScreen() {
   return (
     <View style={styles.container}>
       <FlatList
-        data={posts}
+        data={posts || []}
         renderItem={({ item }) => <PostCard post={item} />}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item._id}
         contentContainerStyle={styles.listContent}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
