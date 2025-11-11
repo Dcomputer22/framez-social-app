@@ -55,6 +55,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     marginTop: 8,
     opacity: 0.9,
+    textAlign: 'center',
   },
   buttons: {
     width: '100%',

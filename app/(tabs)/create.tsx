@@ -71,7 +71,7 @@ export default function CreatePostScreen() {
         Alert.alert('Success', 'Post created successfully!');
         setContent('');
         setImage(null);
-        router.back();
+        router.push('/(tabs)');
       })
       .catch((error) => {
         Alert.alert('Error', error.message);

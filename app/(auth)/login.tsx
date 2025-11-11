@@ -34,7 +34,15 @@ export default function LoginScreen() {
         router.replace('/(tabs)/profile');
       })
       .catch((error) => {
-        Alert.alert('Login Failed', error.message);
+        let userMessage = 'An unexpected error occurred';
+        if (error.message.includes('Invalid')) {
+          userMessage = 'Incorrect email or password';
+        } else if (error.message.includes('network')) {
+          userMessage = 'Please check your internet connection';
+        } else {
+          userMessage = error.message;
+        }
+        Alert.alert('Login Failed', userMessage);
       })
       .finally(() => {
         setLoading(false);

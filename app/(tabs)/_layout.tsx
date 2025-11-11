@@ -22,10 +22,14 @@ const TabsLayout = () => {
   return (
     <Tabs
       screenOptions={{
+        title: 'Framez',
         tabBarActiveTintColor: '#54c7aeff',
         tabBarInactiveTintColor: 'gray',
         headerStyle: { backgroundColor: '#fff' },
-        headerTitleStyle: { fontWeight: 'bold' },
+        headerTitleStyle: { fontWeight: 'bold', color: '#54c7aeff' },
+        tabBarIcon: ({ color, size }) => (
+          <Ionicons name="home" size={size} color={color} />
+        ),
       }}
     >
       <Tabs.Screen

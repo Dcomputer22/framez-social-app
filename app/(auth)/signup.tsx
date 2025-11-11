@@ -40,7 +40,15 @@ export default function SignupScreen() {
         router.replace('/(tabs)/profile');
       })
       .catch((error) => {
-        Alert.alert('Signup Failed', error.message);
+        let userMessage = 'An unexpected error occurred';
+        if (error.message.includes('exists')) {
+          userMessage = 'This user already exists';
+        } else if (error.message.includes('network')) {
+          userMessage = 'Please check your internet connection';
+        } else {
+          userMessage = error.message;
+        }
+        Alert.alert('Signup Failed', userMessage);
       })
       .finally(() => {
         setLoading(false);
