@@ -152,6 +152,11 @@ Then:
 - Press `i` for iOS simulator (Mac only)
 - Scan QR code with Expo Go app on your phone
 
+## Hosting
+
+- This app was hosted in https://appetize.io/
+- url link - https://appetize.io/apps/android/com.oyiza25.framezsocialapp
+
 ## Author
 
 Fatima - HNG Stage 4 Frontend Task

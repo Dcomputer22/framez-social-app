@@ -21,7 +21,7 @@
       "package": "com.oyiza25.framezsocialapp",
       "adaptiveIcon": {
         "backgroundColor": "#54c7ae",
-        "foregroundImage": "./assets/images/android-icon-foreground.png"
+        "foregroundImage": "./assets/images/favicon.png"
       },
       "permissions": [
         "READ_EXTERNAL_STORAGE",
