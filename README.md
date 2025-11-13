@@ -155,7 +155,7 @@ Then:
 ## Hosting
 
 - This app was hosted in https://appetize.io/
-- url link - https://appetize.io/apps/android/com.oyiza25.framezsocialapp
+- url link - [https://appetize.io/apps/android/com.oyiza25.framezsocialapp](https://appetize.io/app/b_uj7sv3apbj5bzrbishcel3o5pm)
 
 ## Author
 
